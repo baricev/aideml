@@ -27,11 +27,9 @@ def _setup_deepseek_client():
     api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
         raise ValueError("DEEPSEEK_API_KEY environment variable is required")
-    
+
     _client = openai.OpenAI(
-        base_url="https://api.deepseek.com",
-        api_key=api_key,
-        max_retries=0
+        base_url="https://api.deepseek.com", api_key=api_key, max_retries=0
     )
 
 
@@ -95,7 +93,7 @@ def query(
     message = choice.message
 
     # Handle tool calls if present
-    if func_spec is not None and hasattr(message, 'tool_calls') and message.tool_calls:
+    if func_spec is not None and hasattr(message, "tool_calls") and message.tool_calls:
         tool_call = message.tool_calls[0]
         if tool_call.function.name == func_spec.name:
             try:

@@ -1,4 +1,10 @@
-from . import backend_anthropic, backend_openai, backend_openrouter, backend_gemini, backend_deepseek
+from . import (
+    backend_anthropic,
+    backend_openai,
+    backend_openrouter,
+    backend_gemini,
+    backend_deepseek,
+)
 from .utils import FunctionSpec, OutputType, PromptType, compile_prompt_to_md
 import re
 import logging

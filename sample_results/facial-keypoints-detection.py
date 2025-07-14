@@ -76,7 +76,7 @@ def train(model, criterion, optimizer, train_loader, val_loader, epochs=10):
                 val_loss += loss.item()
 
         print(
-            f"Epoch {epoch+1}, Train Loss: {running_loss/len(train_loader)}, Val Loss: {val_loss/len(val_loader)}"
+            f"Epoch {epoch + 1}, Train Loss: {running_loss / len(train_loader)}, Val Loss: {val_loss / len(val_loader)}"
         )
 
 

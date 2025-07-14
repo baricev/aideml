@@ -11,10 +11,12 @@ env:
   SKIP_OPT_TEST: ${{ vars.SKIP_OPT_TEST || 'false' }}
 
 jobs:
-  optimize:
+  optimization-test:
+    if: ${{ secrets.SKIP_OPT_TEST != 'true' }}
     runs-on: ubuntu-latest
-    if: env.SKIP_OPT_TEST != 'true'
     steps:
+      - name: Run optimization test
+        run: echo "Running optimization test"
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Python
