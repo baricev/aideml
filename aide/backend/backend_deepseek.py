@@ -48,34 +48,57 @@ def query(
 
     # Handle function call outputs if present
     if func_spec is not None:
-        fc_info = message.additional_kwargs.get("tool_calls") or message.additional_kwargs.get(
-            "function_call"
-        )
+        fc_info = message.additional_kwargs.get(
+            "tool_calls",
+        ) or message.additional_kwargs.get("function_call")
         if fc_info:
             if isinstance(fc_info, list):
-                fc = fc_info[0].get("function", {})
+                fc_raw = fc_info[0]
             else:
-                fc = fc_info
+                fc_raw = fc_info
 
-            if fc.get("name") == func_spec.name:
+            if hasattr(fc_raw, "function"):
+                fc = {
+                    "name": getattr(fc_raw.function, "name", None),
+                    "arguments": getattr(fc_raw.function, "arguments", "{}"),
+                }
+            elif isinstance(fc_raw, dict) and "function" in fc_raw:
+                fc = fc_raw.get("function", {})
+            else:
+                fc = fc_raw
+
+            if isinstance(fc, dict) and fc.get("name") == func_spec.name:
                 try:
                     output = json.loads(fc.get("arguments", "{}"))
                 except json.JSONDecodeError as ex:
                     logger.error(
-                        "Error decoding function arguments:\n" f"{fc.get('arguments')}"
+                        "Error decoding function arguments:\n%s",
+                        fc.get("arguments"),
                     )
                     raise ex
             else:
                 logger.warning(
-                    f"Function name mismatch: expected {func_spec.name}, got {fc.get('name')}. Fallback to text."
+                    "Function name mismatch: expected %s, got %s. Fallback to text.",
+                    func_spec.name,
+                    (
+                        fc.get("name")
+                        if isinstance(fc, dict)
+                        else getattr(fc, "name", None)
+                    ),
                 )
 
     usage = getattr(response.raw, "usage", None)
     if usage is None:
         in_tokens = out_tokens = 0
     else:
-        in_tokens = getattr(usage, "prompt_tokens", usage.get("prompt_tokens", 0))
-        out_tokens = getattr(usage, "completion_tokens", usage.get("completion_tokens", 0))
+        in_tokens = getattr(usage, "prompt_tokens", None)
+        if in_tokens is None and hasattr(usage, "get"):
+            in_tokens = usage.get("prompt_tokens", 0)
+        out_tokens = getattr(usage, "completion_tokens", None)
+        if out_tokens is None and hasattr(usage, "get"):
+            out_tokens = usage.get("completion_tokens", 0)
+        in_tokens = in_tokens or 0
+        out_tokens = out_tokens or 0
 
     info = {
         "system_fingerprint": getattr(response.raw, "system_fingerprint", None),

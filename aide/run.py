@@ -24,6 +24,7 @@ from rich.progress import (
 from rich.text import Text
 from rich.status import Status
 from rich.tree import Tree
+import os
 from .utils.config import load_task_desc, prep_agent_workspace, save_run, load_cfg
 
 logger = logging.getLogger("aide")
@@ -54,6 +55,9 @@ def journal_to_rich_tree(journal: Journal):
 
 
 def run():
+    if not os.getenv("DEEPSEEK_API_KEY"):
+        logger.error("DEEPSEEK_API_KEY environment variable not set. Aborting run.")
+        raise SystemExit(1)
     cfg = load_cfg()
     logger.info(f'Starting run "{cfg.exp_name}"')
 
