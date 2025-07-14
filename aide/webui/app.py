@@ -53,6 +53,7 @@ class WebUI:
             "anthropic_key": os.getenv("ANTHROPIC_API_KEY", ""),
             "gemini_key": os.getenv("GEMINI_API_KEY", ""),
             "openrouter_key": os.getenv("OPENROUTER_API_KEY", ""),
+            "deepseek_key": os.getenv("DEEPSEEK_API_KEY", ""),
         }
 
     @staticmethod
@@ -139,10 +140,21 @@ class WebUI:
                 type="password",
                 label_visibility="collapsed",
             )
+            st.markdown(
+                "<p style='text-align: center;'>DeepSeek API Key</p>",
+                unsafe_allow_html=True,
+            )
+            deepseek_key = st.text_input(
+                "DeepSeek API Key",
+                value=self.env_vars.get("deepseek_key", ""),
+                type="password",
+                label_visibility="collapsed",
+            )
             if st.button("Save API Keys", use_container_width=True):
                 st.session_state.openai_key = openai_key
                 st.session_state.anthropic_key = anthropic_key
                 st.session_state.openrouter_key = openrouter_key
+                st.session_state.deepseek_key = deepseek_key
                 st.success("API keys saved!")
 
     def render_input_section(self, results_col):
@@ -357,6 +369,8 @@ class WebUI:
             os.environ["GEMINI_API_KEY"] = st.session_state.gemini_key
         if st.session_state.get("openrouter_key"):
             os.environ["OPENROUTER_API_KEY"] = st.session_state.openrouter_key
+        if st.session_state.get("deepseek_key"):
+            os.environ["DEEPSEEK_API_KEY"] = st.session_state.deepseek_key
 
     def prepare_input_directory(self, files):
         """

@@ -43,12 +43,12 @@ agent:
 
   # LLM settings for coding
   code:
-    model: o4-mini
+    model: deepseek-coder
     temp: 0.5
 
   # LLM settings for evaluating program output / tracebacks
   feedback:
-    model: gpt-4.1-mini
+    model: deepseek-reasoner
     temp: 0.5
 
   # hyperparameters for the tree search
