@@ -9,6 +9,9 @@ from .utils import FunctionSpec, OutputType, opt_messages_to_list, backoff_creat
 from funcy import notnone, once, select_values
 import openai
 
+api_base = "https://api.deepseek.com/v1"
+model = "deepseek-reasoner"
+
 logger = logging.getLogger("aide")
 
 _client: openai.OpenAI = None  # type: ignore
@@ -24,7 +27,10 @@ OPENAI_TIMEOUT_EXCEPTIONS = (
 @once
 def _setup_openai_client():
     global _client
-    _client = openai.OpenAI(max_retries=0)
+    _client = openai.OpenAI(
+        base_url=api_base,
+        max_retries=0,
+    )
 
 
 def query(

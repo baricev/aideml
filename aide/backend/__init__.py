@@ -7,7 +7,7 @@ logger = logging.getLogger("aide")
 
 
 def determine_provider(model: str) -> str:
-    if re.match(r"^(gpt-|o\d-|codex-mini-latest$)", model):
+    if re.match(r"^(gpt-|o\d-|codex-mini-latest$)", model) or model.startswith("deepseek-"):
         return "openai"
     elif model.startswith("claude-"):
         return "anthropic"
