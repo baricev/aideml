@@ -1,18 +1,15 @@
 name: Optimization Test
-
 on:
   push:
     paths:
       - '**/*.py'
       - '.github/workflows/optimization-test.yml'
   workflow_dispatch:
-
 env:
   SKIP_OPT_TEST: ${{ vars.SKIP_OPT_TEST || 'false' }}
-
 jobs:
   optimization-test:
-    if: ${{ secrets.SKIP_OPT_TEST != 'true' }}
+    if: ${{ vars.SKIP_OPT_TEST != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Run optimization test
