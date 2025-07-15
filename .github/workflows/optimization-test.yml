@@ -30,7 +30,7 @@ jobs:
         run: |
           aide agent.code.model="deepseek-chat" agent.feedback.model="deepseek-chat" report.model="deepseek-chat" generate_report=False agent.steps=1 data_dir="aide/example_tasks/house_prices" goal="Predict the sales price for each house" eval="RMSE between log-prices"
       - name: Upload logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: aide-logs
           path: logs/
