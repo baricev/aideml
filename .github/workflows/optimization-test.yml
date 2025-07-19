@@ -28,7 +28,7 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
-          aide agent.code.model="deepseek-chat" agent.feedback.model="deepseek-chat" report.model="deepseek-chat" generate_report=True agent.steps=20 search.num_drafts=2 data_dir="aide/example_tasks/house_prices" goal="Predict the sales price for each house" eval="RMSE between log-prices"
+          aide agent.code.model="deepseek-chat" agent.feedback.model="deepseek-chat" report.model="deepseek-chat" generate_report=True agent.steps=20 agent.search.num_drafts=2 data_dir="aide/example_tasks/house_prices" goal="Predict the sales price for each house" eval="RMSE between log-prices"
       - name: Upload logs
         uses: actions/upload-artifact@v4
         with:
